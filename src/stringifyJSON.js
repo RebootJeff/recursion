@@ -5,31 +5,38 @@
 var stringifyJSON = function (obj) {
   // your code goes here
   var type = typeof obj;
-  var result;
+  var result = '';
   if(Array.isArray(obj)){
-    result = result + '['
+    result = '['
     for(var i = 0; i < obj.length; i++){
-      result = result + stringifyJSON(obj[i]) + ',';
+      result = result + stringifyJSON(obj[i]);
+      if(i < obj.length -1){
+        result = result + ',';
+      }
     }
     // Delete extraneous comma at end of string
     // and add closing square bracket.
-    result = result.substr(0,result.length-1) + ']';
+    result = result + ']';
   }
   else if(type === 'string'){
-    result = '"' + obj + '"';
+    result = result + '"' + obj + '"';
   }
   else if(type === 'number' || type === 'boolean' || !obj){
-    result = obj;
+    result = result + obj;
   }
   else{
+    result = '{'; 
     for(var prop in obj){
       if(obj.hasOwnProperty(prop)){
         var key = Object.keys(obj)[0];
         var value = obj[key];
         delete obj[key];
-        result = '"' + key + '":' + value;
+        result = result + '"' + stringifyJSON(key)
+          + '":' + stringifyJSON(value);
       }
     }
+    result = result + '}';
+  }
 
   return result;
 };
