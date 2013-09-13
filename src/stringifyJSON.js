@@ -14,8 +14,6 @@ var stringifyJSON = function (obj) {
         result = result + ',';
       }
     }
-    // Delete extraneous comma at end of string
-    // and add closing square bracket.
     result = result + ']';
   }
   else if(type === 'string'){
@@ -31,9 +29,14 @@ var stringifyJSON = function (obj) {
         var key = Object.keys(obj)[0];
         var value = obj[key];
         delete obj[key];
-        result = result + '"' + stringifyJSON(key)
-          + '":' + stringifyJSON(value);
+        result = result + stringifyJSON(key)
+          + ':' + stringifyJSON(value);
       }
+    }
+    // Delete extraneous comma at end of string. This code is
+    // sad because it knows it is INELEGANT!
+    if(result !== '{'){
+      result = result.substr(0,result.length - 1)
     }
     result = result + '}';
   }
