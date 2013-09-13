@@ -20,23 +20,21 @@ var stringifyJSON = function (obj) {
     result = result + '"' + obj + '"';
   }
   else if(type === 'number' || type === 'boolean' || !obj){
-    result = result + obj;
+    result = result + obj;  // converts obj to a string
   }
   else{
     result = '{'; 
     for(var prop in obj){
       if(obj.hasOwnProperty(prop)){
-        var key = Object.keys(obj)[0];
-        var value = obj[key];
-        delete obj[key];
-        result = result + stringifyJSON(key)
-          + ':' + stringifyJSON(value);
+        result = result + stringifyJSON(prop)
+          + ':' + stringifyJSON(obj[prop]) + ',';
       }
     }
+
     // Delete extraneous comma at end of string. This code is
     // sad because it knows it is INELEGANT!
     if(result !== '{'){
-      result = result.substr(0,result.length - 1)
+      result = result.substr(0,result.length - 1);
     }
     result = result + '}';
   }
