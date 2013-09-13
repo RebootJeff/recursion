@@ -26,8 +26,13 @@ var stringifyJSON = function (obj) {
     result = '{'; 
     for(var prop in obj){
       if(obj.hasOwnProperty(prop)){
-        result = result + stringifyJSON(prop)
-          + ':' + stringifyJSON(obj[prop]) + ',';
+        // Questionable: Apparently the official JSON.stringify 
+        // doesn't like undefined and function, so they get 
+        // ignored below.
+        if(typeof obj[prop] !== 'undefined' && typeof obj[prop] !== 'function'){
+          result = result + stringifyJSON(prop)
+            + ':' + stringifyJSON(obj[prop]) + ',';
+        }
       }
     }
 
