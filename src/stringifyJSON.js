@@ -7,25 +7,29 @@ var stringifyJSON = function (obj) {
   var type = typeof obj;
   var result;
   if(Array.isArray(obj)){
-  	for(var i = 0; i < obj.length; i++){
-  		return stringifyJSON(obj[i]);
-  	}
+    result = result + '['
+    for(var i = 0; i < obj.length; i++){
+      result = result + stringifyJSON(obj[i]) + ',';
+    }
+    // Delete extraneous comma at end of string
+    // and add closing square bracket.
+    result = result.substr(0,result.length-1) + ']';
   }
   else if(type === 'string'){
-  	return '"' + obj + '"';
+    result = '"' + obj + '"';
   }
-  else if(type === 'number' || type === 'boolean'){
-  	return obj;
+  else if(type === 'number' || type === 'boolean' || !obj){
+    result = obj;
   }
   else{
-  	for(var prop in obj){
-  		if(obj.hasOwnProperty(prop)){
-  			var keys = Object.keys(obj);
-  			var value = obj[keys[0]];
-  			delete obj[keys[0]];
-  		}
-  	}
-  }
+    for(var prop in obj){
+      if(obj.hasOwnProperty(prop)){
+        var key = Object.keys(obj)[0];
+        var value = obj[key];
+        delete obj[key];
+        result = '"' + key + '":' + value;
+      }
+    }
 
+  return result;
 };
-
