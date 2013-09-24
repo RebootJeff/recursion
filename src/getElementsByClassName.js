@@ -4,31 +4,23 @@
 // };
 
 // But in stead we're going to implement it from scratch:
-var getElementsByClassName = function (className) {
+var currentNode;
+
+var getElementsByClassName = function (className, currentNode, result) {
   // your code here
 
-  // fragment is used to start a new, empty NodeList
-  var fragment = document.createDocumentFragment();
-  var currentNode = (arguments.length > 1) ? arguments[1] : document.body;
+  currentNode = currentNode || document.body;
+  result = result || [];
+
+  if(currentNode.classList && currentNode.classList.contains(className)){
+    result.push(currentNode);
+  }
+
 
   var children = currentNode.childNodes;
   for(var i = 0; i < children.length; i++){
     var child = children[i];
-    if(checkClasses(child.classList,className)){
-      fragment.appendChild(child);
-    }
-    if(children[i])
-  }
-
-  return fragment.childNodes;
+    getElementsByClassName(className,child,result);
+  };
+  return result;
 };
-
-
-var checkClasses(classes, targetClass){
-  for(var key in classes){
-    if(classes[key] === targetClass){
-      return true;
-    }
-  }
-  return false;
-}
